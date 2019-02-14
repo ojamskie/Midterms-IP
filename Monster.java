@@ -49,7 +49,7 @@ public class Monster{
     }
 
     public void animate(Draw compPass){
-        Thread monThread = new Thread(new Runnable(){
+        Thread monsterThread = new Thread(new Runnable(){
             public void run(){
                 while(idle){
                     for(int ctr = 0; ctr < 5; ctr++){
@@ -81,7 +81,7 @@ public class Monster{
                 }
             }
         });
-        monThread.start();
+        monsterThread.start();
     }
             
     public void moveTo(int toX, int toY){
@@ -100,4 +100,35 @@ public class Monster{
         }
     }
 
-   
+    public void die(Draw compPass){
+        idle = true;
+        if(alive){
+            Thread monsnterThread = new Thread(new Runnable(){
+                public void run(){
+                    for(int ctr = 0; ctr < 4; ctr++){
+                        try {                    
+                            if(ctr==4){
+                                resource = getClass().getResource("slime/die1.png");
+                            }
+                            else{
+                                resource = getClass().getResource("slime/die"+ctr+".png");
+                            }
+                            try{
+                                image = ImageIO.read(resource);
+                            }
+                            catch(IOException e){
+                                e.printStackTrace();
+                            }
+                            compPass.repaint();
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            monsterThread.start();
+        }
+        alive = true;
+    }
+}
